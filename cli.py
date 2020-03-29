@@ -6,16 +6,17 @@ tEv = threading.Event()
 tShutdown = threading.Event()
 
 def receving(name, sock):
+    print("masuk")
     shutdown = False
     while not shutdown:
         try:
-            data,addr = sock.recvfrom(1024)
+            data = sock.recvfrom(1024)
             print(str(data))
-            if '?' in data:
+            if '?' in str(data):
                 tEv.set()
-            if data == "The game is finished":  # message from server to stop
-                tShutdown.set()
+            if "The game is finished" in str(data):  # message from server to stop
                 shutdown = True
+                tShutdown.set()
         except:
             pass
         finally:
@@ -38,15 +39,18 @@ rT.start()
 alias = input("Name: ")
 s.sendto(alias.encode(), server)
 
-running = True
-while running:
+time = 15
+first = True
+while not tShutdown.is_set():
+    if(first and time >= 0):
+        print(time)
     if tEv.wait(1.0):
+        first = False
         tEv.clear()
         message = input(alias + ", what is your answer ?  -> ")
         if message != '':
             s.sendto(message.encode(), server)
-    if tShutdown.is_set():
-        running = False
+    time -= 1
 
 rT.join()
 s.close()

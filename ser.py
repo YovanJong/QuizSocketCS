@@ -68,22 +68,6 @@ def final_score(score):
                 winners.append(i+1)
         print("The winners are players {}".format(winners))
 
-
-"""
-#Number of choosen questions, random order : GIVE THE QUESTION TO THE PLAYER
-nb = 3
-
-for k in range(nb):
-   nbq = chooseQuestion(question2,answer2)
-   agiven = raw_input("What is your answer?  ")
-   result = checkAnswer(answer2,agiven,nbq)
-   print("Your answer is {}".format(result))
-
-#Say who the winner is
-final_score(score)
-"""
-#START THE NETWORK CODE
-#host = '192.168.26.86'
 host = '127.0.0.1'
 
 port = 65534
@@ -112,7 +96,7 @@ while ((secs > 0) and (len(players) < max_players)):
         print("FIRST RECV {}".format(data))
         if addr not in players:
             players.append(addr)
-            print("liste players {}".format(players))
+            print("listed players {}".format(players))
             pesan = "Wait for game to start... "
             s.sendto(pesan.encode(),players[len(players)-1])
         print(time.ctime(time.time()) +  ":" + str(data))
@@ -130,7 +114,7 @@ for i in range(len(players)):
 #ASK QUESTIONS
 nb = 3
 for k in range(nb):
-    print("question nb {}".format(k))
+    print("Nomor {}".format(k+1))
     nbq = chooseQuestion(question2,answer2)
     #print("ENTER FOR")
     for i in range(len(players)):
@@ -140,9 +124,10 @@ for k in range(nb):
             #print("BEFORE GET ANSWER")
             agiven = ""
             ready = select.select([s], [], [], 10)
+            # print(ready[0].values)
             if ready[0]:
                 agiven, addr = s.recvfrom(1024).decode()
-                #print("GOT ANSWER")
+                print("GOT ANSWER")
             print("agiven is : {}".format(agiven))
             checkAnswer(answer2,agiven,nbq)
         except:
