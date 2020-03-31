@@ -126,10 +126,10 @@ for k in range(nb):
             ready = select.select([s], [], [], 10)
             # print(ready[0].values)
             if ready[0]:
-                agiven, addr = s.recvfrom(1024).decode()
+                agiven, addr = s.recvfrom(1024)
                 print("GOT ANSWER")
             print("agiven is : {}".format(agiven))
-            checkAnswer(answer2,agiven,nbq)
+            checkAnswer(answer2,agiven.decode(),nbq)
         except:
             pass
 
